@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 AS build
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y wget gnupg2
@@ -25,3 +25,16 @@ COPY lib lib
 COPY rel rel
 RUN mix do compile, release
 
+FROM ubuntu:20.04 AS app
+
+WORKDIR /app
+
+RUN chown nobody:nogroup /app
+
+USER nobody:nogroup
+
+COPY --from=build --chown=nobody:nogroup /app/_build/prod/rel/hello_phoenix ./
+
+ENV HOME=/app
+
+CMD ["bin/hello_phoenix", "start"]
