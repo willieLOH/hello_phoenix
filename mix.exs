@@ -10,6 +10,7 @@ defmodule HelloPhoenix.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
+      releases: releases(),
       deps: deps()
     ]
   end
@@ -54,6 +55,14 @@ defmodule HelloPhoenix.MixProject do
   defp aliases do
     [
       setup: ["deps.get"]
+    ]
+  end
+
+  defp releases do
+    [
+      hello_phoenix: [
+        steps: [:assemble, :tar]
+      ]
     ]
   end
 end
